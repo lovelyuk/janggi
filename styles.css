@@ -1,0 +1,236 @@
+:root {
+  --cell-size: 64px;
+  --board-border: #7a4b27;
+  --board-light: #f8e5c6;
+  --board-dark: #edcf9f;
+  --palace-highlight: rgba(255, 255, 255, 0.35);
+  --river-color: rgba(70, 130, 180, 0.18);
+  --move-highlight: rgba(76, 175, 80, 0.35);
+  --selection-color: rgba(255, 215, 0, 0.45);
+  --in-check: rgba(220, 20, 60, 0.35);
+  font-family: "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  color: #2c1a09;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #f5efe6;
+}
+
+.layout {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 2rem;
+  padding: 2.5rem clamp(1.5rem, 4vw, 3rem);
+  align-items: start;
+}
+
+.board-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(9, var(--cell-size));
+  grid-template-rows: repeat(10, var(--cell-size));
+  border: 6px solid var(--board-border);
+  background: #d9b88b;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.18);
+  position: relative;
+}
+
+.cell {
+  width: var(--cell-size);
+  height: var(--cell-size);
+  border: 1px solid rgba(110, 71, 33, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background-color: var(--board-light);
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.cell.dark {
+  background-color: var(--board-dark);
+}
+
+.cell.palace::after {
+  content: "";
+  position: absolute;
+  inset: 12%;
+  border: 1px dashed rgba(0, 0, 0, 0.2);
+  pointer-events: none;
+  background: var(--palace-highlight);
+}
+
+.cell.river {
+  background: linear-gradient(var(--board-light), var(--river-color));
+}
+
+.cell.river.dark {
+  background: linear-gradient(var(--board-dark), var(--river-color));
+}
+
+.cell.legal::before {
+  content: "";
+  position: absolute;
+  width: 70%;
+  height: 70%;
+  border-radius: 50%;
+  border: 3px solid rgba(76, 175, 80, 0.65);
+  background: var(--move-highlight);
+  pointer-events: none;
+}
+
+.cell.selected {
+  box-shadow: inset 0 0 0 4px rgba(255, 215, 0, 0.8);
+  z-index: 1;
+}
+
+.cell.last-from,
+.cell.last-to {
+  box-shadow: inset 0 0 0 3px rgba(0, 0, 0, 0.35);
+}
+
+.cell.in-check {
+  background: linear-gradient(var(--in-check), var(--in-check));
+}
+
+.piece {
+  width: 74%;
+  height: 74%;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  font-weight: 700;
+  background: #fdf7ef;
+  border: 3px solid rgba(0, 0, 0, 0.2);
+  color: #a0302a;
+  user-select: none;
+  transition: transform 0.2s ease;
+}
+
+.piece.blue {
+  background: #f2f8ff;
+  color: #004b8d;
+  border-color: rgba(0, 75, 141, 0.35);
+}
+
+.piece:hover {
+  transform: scale(1.05);
+}
+
+.sidebar {
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 16px;
+  padding: 1.75rem;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar h1 {
+  margin-top: 0;
+  font-size: 2rem;
+}
+
+.description {
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+}
+
+.status-panel {
+  padding: 1rem;
+  background: rgba(217, 184, 139, 0.15);
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+}
+
+.status-row {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.status-message {
+  margin: 0;
+  line-height: 1.4;
+}
+
+.primary-button {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  font-size: 1.05rem;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  background: linear-gradient(135deg, #c06c3b, #a0471c);
+  color: #fff;
+  font-weight: 700;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.primary-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 18px rgba(160, 71, 28, 0.35);
+}
+
+.primary-button:active {
+  transform: translateY(1px);
+}
+
+.how-to-play {
+  margin-top: 2rem;
+}
+
+.how-to-play h2 {
+  margin-top: 0;
+  font-size: 1.4rem;
+}
+
+.how-to-play ul {
+  padding-left: 1.2rem;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.how-to-play li + li {
+  margin-top: 0.3rem;
+}
+
+@media (max-width: 960px) {
+  :root {
+    --cell-size: 56px;
+  }
+
+  .layout {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .sidebar {
+    order: -1;
+  }
+}
+
+@media (max-width: 640px) {
+  :root {
+    --cell-size: 48px;
+  }
+
+  .layout {
+    padding: 1.5rem;
+  }
+
+  .piece {
+    font-size: 1.4rem;
+  }
+}
